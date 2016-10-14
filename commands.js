@@ -44,6 +44,10 @@ module.exports=function(io){
 		sendRawCommand(`say ${message}`);
 	};
 
+	var tellRaw=(player,message)=>{
+		sendRawCommand(`tellRaw ${player} ${JSON.stringify(message)}`);
+	}
+
 	var tp=(player,x,y,z)=>{
 		sendCommand('tp',[player,x,y,z]);
 	};
