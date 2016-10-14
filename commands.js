@@ -40,6 +40,10 @@ module.exports=function(io){
 		sendCommand('pardon',[player]);
 	};
 
+	var ptp=(player,destinationPlayer)=>{
+		sendCommand('ptp',[player,destinationPlayer]);
+	}
+
 	var say=(message)=>{
 		sendRawCommand(`say ${message}`);
 	};
@@ -50,6 +54,10 @@ module.exports=function(io){
 
 	var tp=(player,x,y,z)=>{
 		sendCommand('tp',[player,x,y,z]);
+	};
+
+	var tpRelative = (player, x, y, z) => {
+		sendCommand('tp', [`~${x}`,`~${y}`,`~${z}`]);
 	};
 
 	var weather=(type)=>{
