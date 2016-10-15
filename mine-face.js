@@ -27,3 +27,7 @@ processIn.on('line', input => {
 var server = Server(minecraftOut, minecraftServer.stdin);
 var pluginHandler = PluginHandler(server);
 pluginHandler.loadPlugins();
+
+server.on('command:plugins', (player) => {
+  server.commands.tellraw(player, {text: `Plugins: ${Object.keys(pluginHandler.plugins).join(" ")}`, color: "green"});
+});

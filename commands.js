@@ -38,8 +38,8 @@ module.exports = (io) => {
 		say: (message) => {
 			sendRawCommand(`say ${message}`);
 		},
-		tellRaw: (player, message) => {
-			sendRawCommand(`tellRaw ${player} ${JSON.stringify(message)}`);
+		tellraw: (player, message) => {
+			sendRawCommand(`tellraw ${player} ${JSON.stringify(message)}`);
 		},
 		tp: (player, x, y, z) => {
 			sendCommand('tp', [player, x, y, z]);

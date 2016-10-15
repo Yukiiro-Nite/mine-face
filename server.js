@@ -18,7 +18,7 @@ module.exports = (input, io) => {
       this.on('line', (timestamp, type, details) =>{
         console.log(`${timestamp} ${details}`);
         that.matchers.forEach((matcher)=>{
-          var result = matcher.regex.exec(details);
+          let result = matcher.regex.exec(details);
           if(result){
             matcher.name && that.emit(matcher.name, ...result);
             matcher.onMatch && matcher.onMatch(result);
