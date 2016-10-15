@@ -1,25 +1,14 @@
 var config = require('./config.json');
 var EventEmitter = require('events');
 var commandsUtil = require('./commands.js');
+var Matchers = require('./matchers.js');
 module.exports = (input, io) => {
   class ServerEmitter extends EventEmitter {
     constructor(){
       super();
       var that = this;
       this.commands = commandsUtil(io);
-      this.matchers = [
-        {
-          name: "chat",
-          regex:/^<(.*)> ([^-].*)$/g
-        },
-        {
-          name: "command",
-          regex:/^<(.*)> -(\w*) (.*)/g,
-          onMatch: (match) => {
-            that.emit(`command:${match[2]}`, match[1], match[3].split(" "));
-          }
-        }
-      ];
+      this.matchers = Matchers(this);
       input.on('line', (line)=>{
         var args = line.split(": ");
         var info = args[0].split(" ");
