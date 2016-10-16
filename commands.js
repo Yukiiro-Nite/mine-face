@@ -33,7 +33,7 @@ module.exports = (io) => {
 			sendCommand('pardon', [player]);
 		},
 		ptp: (player, destinationPlayer) => {
-			sendCommand('ptp', [player, destinationPlayer]);
+			sendCommand('tp', [player, destinationPlayer]);
 		},
 		say: (message) => {
 			sendRawCommand(`say ${message}`);

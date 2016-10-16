@@ -8,13 +8,10 @@ module.exports = (server) => {
   server.on('command:home', (player, args) => {
     if(args.length == 0){ // return if there aren't any args
       server.commands.tellraw(player, {text: 'Please specify a home name! (eg. -home home1)', color: 'red'});
-      return;
     } else if(!homesConfig.homes[player]){ // return if the player doesn't have any homes
       server.commands.tellraw(player, {text: `You don't have any homes! try using: -sethome home1`, color: 'red'});
-      return;
     } else if(!homesConfig.homes[player][args[0]]){ // return if the player hasn't set the specified home
       server.commands.tellraw(player, {text: `You haven't set ${args[0]}! try using: -sethome ${args[0]}`, color: 'red'});
-      return;
     } else {
       server.commands.tp(player, ...homesConfig.homes[player][args[0]]);
     }
@@ -41,13 +38,10 @@ module.exports = (server) => {
   server.on('command:removehome', (player, args) => {
     if(args.length == 0){ // return if there aren't any args
       server.commands.tellraw(player, {text: 'Please specify a home name (eg. -removehome home1)', color: 'red'});
-      return;
     } else if(!homesConfig.homes[player]){ // return if the player doesn't have any homes
       server.commands.tellraw(player, {text: `You don't have any homes! try using: -sethome home1`, color: 'red'});
-      return;
     } else if(!homesConfig.homes[player][args[0]]){ // return if the player hasn't set the specified home
       server.commands.tellraw(player, {text: `You haven't set ${args[0]}! try using: -sethome ${args[0]}`, color: 'red'});
-      return;
     } else {
       delete homesConfig.homes[player][args[0]];
       save();
@@ -58,13 +52,16 @@ module.exports = (server) => {
   server.on('command:listhomes', (player) => {
     let message = [{text: 'Homes: ', color: 'green'}];
     Object.keys(homesConfig.homes[player]).forEach( home => {
-      message.push({text: home, underlined: true, clickEvent:{action:"suggest_command",value:`-home ${home}`}});
+      message.push({
+        text: home,
+        underlined: true,
+        clickEvent: {action:"run_command", value:`-home ${home}`},
+        hoverEvent: {action:"show_text", value:{text:`click to tp to ${home}`}}
+      });
       message.push(" ");
     });
     server.commands.tellraw(player, message);
   });
-
-
 
   fs.readFile('./plugins/home-config.json', (err, data) => {
     if(err) {

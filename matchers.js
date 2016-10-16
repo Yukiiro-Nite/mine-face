@@ -29,14 +29,16 @@ module.exports = (server) => {
       name: 'login',
       regex: /^(\w*) joined the game$/,
       onMatch: (match) => {
-        server.emit(`login:${match[1]}`)
+        server.emit(`login:${match[1]}`);
+        server.players[match[1]] = {online: true};
       }
     },
     {
       name: 'logout',
       regex: /^(\w*) left the game$/,
       onMatch: (match) => {
-        server.emit(`logout:${match[1]}`)
+        server.emit(`logout:${match[1]}`);
+        delete server.players[match[1]];
       }
     },
     {
