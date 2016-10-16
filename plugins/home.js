@@ -75,4 +75,37 @@ module.exports = (server) => {
   const save = () => {
     fs.writeFile('./plugins/home-config.json', JSON.stringify(homesConfig));
   };
+
+  const help = (commandName) => {
+    switch (commandName){
+      case 'home':
+        return {
+          text: `Teleports player to their specified home. (eg: -home home1)`,
+          color:'white',
+          underlined:'false'
+        };
+      case 'sethome':
+        return {
+          text: `Sets a home to the player's current location. (eg: -sethome home1)`,
+          color:'white',
+          underlined:'false'
+        };
+      case 'removehome':
+        return {
+          text: `Removes the specified home from the player's home list. (eg: -removehome home1)`,
+          color:'white',
+          underlined:'false'
+        };
+      case 'listhomes':
+        return {
+          text: `Lists all of the player's homes. (eg: -listhomes)`,
+          color:'white',
+          underlined:'false'
+        };
+    }
+  };
+
+  return {
+    help
+  }
 };

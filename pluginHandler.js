@@ -2,8 +2,8 @@ module.exports = (server) => {
   const fs = require('fs');
 
   let plugins = {};
-
   let defaultState;
+  let commandParents;
 
   const getDefaultListeners = () => {
     let returnValue = {};
@@ -15,6 +15,8 @@ module.exports = (server) => {
 
   const loadPlugins = () => {
     defaultState = getDefaultListeners();
+    let currentCommands = getCommandsWithCount();
+    commandParents = {};
     fs.readdir('./plugins', function (err, files) {
       if (err) {
         console.log(err);
@@ -27,6 +29,20 @@ module.exports = (server) => {
           console.log(`[Plugin Handler] Loading ${pluginName}`);
           //give the plugin the emitter and store the plugin
           plugins[pluginName] = require(`./plugins/${file}`)(server);
+
+          //find out what commands the newly loaded plugin added
+          let newCommands = getCommandsWithCount();
+          Object.keys(newCommands)
+            .filter( name => {
+              return newCommands[name] !== currentCommands[name];
+            })
+            .forEach( name => {
+              if(!commandParents[name]){
+                commandParents[name] = [];
+              }
+              commandParents[name].push(pluginName);
+            });
+          currentCommands = newCommands;
         }
       });
     });
@@ -53,9 +69,29 @@ module.exports = (server) => {
     loadPlugins();
   };
 
+  const getCommandsWithCount = () => {
+    let returnValue = {};
+    getCommandNames().forEach(name => {
+      returnValue[name] = server.listenerCount(`command:${name}`);
+    });
+    return returnValue;
+  };
+
+  const getCommandNames = () => {
+    return server.eventNames()
+      .filter(name => {return name.startsWith('command:')})
+      .map(name => {return name.substr('command:'.length)});
+  };
+
+  const getPluginNamesForCommand = (commandName) => {
+    return commandParents[commandName] || [];
+  };
+
   return {
-    loadPlugins: loadPlugins,
-    reloadPlugins: reloadPlugins,
-    plugins: plugins
+    plugins,
+    loadPlugins,
+    reloadPlugins,
+    getCommandNames,
+    getPluginNamesForCommand
   }
 };

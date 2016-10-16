@@ -15,4 +15,15 @@ module.exports = (server) => {
     if(err) return;
     spawnCoords = JSON.parse(data);
   });
+
+  const help = (commandName) => {
+    switch (commandName){
+      case 'spawn':
+        return {
+          text: `Teleports the player to the world spawn. (eg: -spawn)`,
+          color:'white',
+          underlined:'false'
+        };
+    }
+  };
 };

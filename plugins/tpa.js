@@ -77,4 +77,33 @@ module.exports = (server) => {
       delete requests[player];
     }
   });
+
+  const help = (commandName) => {
+    switch (commandName){
+      case 'tpa':
+        return {
+          text: `Allows the player to request to tp to another player. (eg: -tpa Player1)`,
+          color:'white',
+          underlined:'false'
+        };
+      case 'tpahere':
+        return {
+          text: `Allows the player to request a player to tp to them. (eg: -tpahere Player1)`,
+          color:'white',
+          underlined:'false'
+        };
+      case 'tpaccept':
+        return {
+          text: `Accepts the current pending tp request. (eg: -tpaccept)`,
+          color:'white',
+          underlined:'false'
+        };
+      case 'tpdecline':
+        return {
+          text: `Declines the current pending tp request. (eg: -tpdecline)`,
+          color:'white',
+          underlined:'false'
+        };
+    }
+  };
 };
