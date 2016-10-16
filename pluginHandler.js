@@ -1,9 +1,20 @@
 module.exports = (server) => {
-  var fs = require('fs');
+  const fs = require('fs');
 
-  var plugins = {};
+  let plugins = {};
 
-  var loadPlugins = () => {
+  let defaultState;
+
+  const getDefaultListeners = () => {
+    let returnValue = {};
+    server.eventNames().forEach(eventName => {
+      returnValue[eventName] = server.listeners(eventName);
+    });
+    return returnValue;
+  };
+
+  const loadPlugins = () => {
+    defaultState = getDefaultListeners();
     fs.readdir('./plugins', function (err, files) {
       if (err) {
         console.log(err);
@@ -21,8 +32,25 @@ module.exports = (server) => {
     });
   };
 
-  var reloadPlugins = () => {
-    //figure out how to properly unload a plugin
+  const reloadPlugins = () => {
+    //clear all of the listeners
+    server.eventNames().forEach(eventName => {
+      server.removeAllListeners(eventName);
+    });
+    //clean up the plugins
+    Object.keys(plugins).forEach(pluginName => {
+      plugins[pluginName] && plugins[pluginName].onRemove && plugins[pluginName].onRemove();
+      delete require.cache[require.resolve(`./plugins/${pluginName}.js`)]; //gotta get rid of the require cache so we can get new changes.
+      delete plugins[pluginName];
+    });
+    //reload the initial listeners
+    Object.keys(defaultState).forEach(eventName => {
+      defaultState[eventName].forEach(eventFunction => {
+        server.on(eventName, eventFunction);
+      });
+    });
+    //load plugins again
+    loadPlugins();
   };
 
   return {

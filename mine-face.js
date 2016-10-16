@@ -26,8 +26,19 @@ processIn.on('line', input => {
 
 var server = Server(minecraftOut, minecraftServer.stdin);
 var pluginHandler = PluginHandler(server);
-pluginHandler.loadPlugins();
 
 server.on('command:plugins', (player) => {
-  server.commands.tellraw(player, {text: `Plugins: ${Object.keys(pluginHandler.plugins).join(" ")}`, color: "green"});
+  server.commands.tellraw(player, {text: `Plugins: ${Object.keys(pluginHandler.plugins).join(", ")}`, color: "green"});
 });
+
+server.on('command:reloadplugins', (player) => {
+  if(server.player.isOp(player)) {
+    server.commands.tellraw(player, {text: 'Reloading plugins!', color: 'green'});
+    pluginHandler.reloadPlugins();
+    server.commands.tellraw(player, {text: 'Reloading completed!', color: 'green'});
+  } else {
+    server.commands.tellraw(player, {text: `You don't have permissions for this command!`, color: 'red'});
+  }
+});
+
+pluginHandler.loadPlugins();
