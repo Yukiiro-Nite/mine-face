@@ -2,6 +2,7 @@ var config = require('./config.json');
 var EventEmitter = require('events');
 var commandsUtil = require('./commands.js');
 var Matchers = require('./matchers.js');
+var Player = require('./player.js');
 module.exports = (input, io) => {
   class ServerEmitter extends EventEmitter {
     constructor(){
@@ -9,6 +10,8 @@ module.exports = (input, io) => {
       var that = this;
       this.commands = commandsUtil(io);
       this.matchers = Matchers(this);
+      this.player = Player(this);
+      this.players = {};
       input.on('line', (line)=>{
         var args = line.split(": ");
         var info = args[0].split(" ");

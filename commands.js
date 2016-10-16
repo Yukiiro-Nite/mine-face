@@ -11,7 +11,7 @@ module.exports = (io) => {
 		ban: (player, reason) => {
 			sendCommand('ban', [player, reason]);
 		},
-		clear: (player, item, dataValue, maxCount) => {
+		clear: (player, item, dataValue = '', maxCount = '') => {
 			sendCommand('clear', [player, item, dataValue, maxCount]);
 		},
 		difficulty: (level) => {
@@ -44,8 +44,8 @@ module.exports = (io) => {
 		tp: (player, x, y, z) => {
 			sendCommand('tp', [player, x, y, z]);
 		},
-		tpRelative: (player, x, y, z) => {
-			sendCommand('tp', [`~${x}`,`~${y}`,`~${z}`]);
+		tpRelative: (player, x = '', y = '', z = '') => {
+			sendCommand('tp', [player, `~${x}`,`~${y}`,`~${z}`]);
 		},
 		weather: (type) => {
 			sendCommand('weather', [type]);
