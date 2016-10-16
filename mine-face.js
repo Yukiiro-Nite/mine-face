@@ -1,17 +1,26 @@
-var spawn = require('child_process').spawn;
-var readline = require('readline');
-var config = require('./config.json');
-var PluginHandler = require('./pluginHandler.js');
-var Server = require('./server.js');
+const spawn = require('child_process').spawn;
+const readline = require('readline');
+const fs = require('fs');
 
-var serverJarName = process.argv[2] || config.serverJarName || 'minecraft_server.jar';
-var minecraftServer = spawn('java', ['-jar', serverJarName, 'nogui']);
+const config = require('./config.json');
+const PluginHandler = require('./pluginHandler.js');
+const Server = require('./server.js');
 
-var minecraftOut = readline.createInterface({
+const getLocalMinecraftFile = () => {
+  return fs.readdirSync('./')
+    .filter(file => {
+      return file.startsWith('minecraft_server') && file.endsWith('.jar');
+    })[0];
+};
+
+const serverJarName = process.argv[2] || config.serverJarName || getLocalMinecraftFile();
+const minecraftServer = spawn('java', ['-jar', serverJarName, 'nogui']);
+
+const minecraftOut = readline.createInterface({
   input: minecraftServer.stdout
 });
 
-var processIn = readline.createInterface({
+const processIn = readline.createInterface({
   input: process.stdin
 });
 
@@ -24,8 +33,8 @@ processIn.on('line', input => {
   minecraftServer.stdin.write(`${input}\r\n`);
 });
 
-var server = Server(minecraftOut, minecraftServer.stdin);
-var pluginHandler = PluginHandler(server);
+const server = Server(minecraftOut, minecraftServer.stdin);
+const pluginHandler = PluginHandler(server);
 
 server.on('command:plugins', (player) => {
   server.commands.tellraw(player, {text: `Plugins: ${Object.keys(pluginHandler.plugins).join(", ")}`, color: "green"});
