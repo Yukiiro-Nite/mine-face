@@ -32,6 +32,9 @@ module.exports = (io) => {
 		pardon: (player) => {
 			sendCommand('pardon', [player]);
 		},
+		playSound: (sound, source, player) => {
+			sendCommand('playSound', [sound, source, player]);
+		},
 		ptp: (player, destinationPlayer) => {
 			sendCommand('tp', [player, destinationPlayer]);
 		},
@@ -40,6 +43,15 @@ module.exports = (io) => {
 		},
 		tellraw: (player, message) => {
 			sendRawCommand(`tellraw ${player} ${JSON.stringify(message)}`);
+		},
+		spreadPlayers: (x, z, spreadDistance, maxRange, respectTeams, player) => {
+			sendCommand('spreadPlayers', [x, z, spreadDistance, maxRange, respectTeams, ...player]);
+		},
+		summon: (entityName, x, y, z, dataTag) => {
+			sendCommand('summon', [entityName, x, y, z, dataTag]);
+		},
+		testFor: (player, dataTag) => {
+			sendCommand('testFor', [player, JSON.stringify(dataTag)]);
 		},
 		tp: (player, x, y, z) => {
 			sendCommand('tp', [player, x, y, z]);
