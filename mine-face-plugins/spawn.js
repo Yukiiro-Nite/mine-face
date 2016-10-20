@@ -8,10 +8,10 @@ module.exports = (server) => {
 
   server.on('setWorldSpawn', (line, player, x, y, z) => {
     spawnCoords = [x, y, z];
-    fs.writeFile('./plugins/spawn-config.json', JSON.stringify(spawnCoords));
+    fs.writeFile('./mine-face-plugins/spawn-config.json', JSON.stringify(spawnCoords));
   });
 
-  fs.readFile('./plugins/spawn-config.json', (err, data) => {
+  fs.readFile('./mine-face-plugins/spawn-config.json', (err, data) => {
     if(err) return;
     spawnCoords = JSON.parse(data);
   });

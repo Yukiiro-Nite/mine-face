@@ -17,7 +17,7 @@ module.exports = (server) => {
     defaultState = getDefaultListeners();
     let currentCommands = getCommandsWithCount();
     commandParents = {};
-    fs.readdir('./plugins', function (err, files) {
+    fs.readdir('./mine-face-plugins', function (err, files) {
       if (err) {
         console.log(err);
         return;
@@ -28,7 +28,7 @@ module.exports = (server) => {
           var pluginName = file.replace('.js', '');
           console.log(`[Plugin Handler] Loading ${pluginName}`);
           //give the plugin the emitter and store the plugin
-          plugins[pluginName] = require(`./plugins/${file}`)(server);
+          plugins[pluginName] = require(`./mine-face-plugins/${file}`)(server);
 
           //find out what commands the newly loaded plugin added
           let newCommands = getCommandsWithCount();
@@ -56,7 +56,7 @@ module.exports = (server) => {
     //clean up the plugins
     Object.keys(plugins).forEach(pluginName => {
       plugins[pluginName] && plugins[pluginName].onRemove && plugins[pluginName].onRemove();
-      delete require.cache[require.resolve(`./plugins/${pluginName}.js`)]; //gotta get rid of the require cache so we can get new changes.
+      delete require.cache[require.resolve(`./mine-face-plugins/${pluginName}.js`)]; //gotta get rid of the require cache so we can get new changes.
       delete plugins[pluginName];
     });
     //reload the initial listeners

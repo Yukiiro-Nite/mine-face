@@ -63,7 +63,7 @@ module.exports = (server) => {
     server.commands.tellraw(player, message);
   });
 
-  fs.readFile('./plugins/home-config.json', (err, data) => {
+  fs.readFile('./mine-face-plugins/home-config.json', (err, data) => {
     if(err) {
       homesConfig = defaultConfig;
       save();
@@ -73,7 +73,7 @@ module.exports = (server) => {
   });
 
   const save = () => {
-    fs.writeFile('./plugins/home-config.json', JSON.stringify(homesConfig));
+    fs.writeFile('./mine-face-plugins/home-config.json', JSON.stringify(homesConfig));
   };
 
   const help = (commandName) => {
