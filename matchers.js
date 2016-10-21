@@ -20,7 +20,7 @@ module.exports = (server) => {
     },
     {
       name: 'teleport',
-      regex:/^Teleported (\w*) to (\d*\.\d*), (\d*\.\d*), (\d*\.\d*)$/,
+      regex:/^Teleported (\w*) to (-?\d*\.\d*), (-?\d*\.\d*), (-?\d*\.\d*)$/,
       onMatch: (match) => {
         server.emit(`teleport:${match[1]}`, match[2], match[3], match[4]);
       }
@@ -64,7 +64,7 @@ module.exports = (server) => {
     },
     {
       name: 'setWorldSpawn',
-      regex: /^\[(\w*): Set the world spawn point to \((\d*), (\d*), (\d*)\)]$/
+      regex: /^\[(\w*): Set the world spawn point to \((-?\d*), (-?\d*), (-?\d*)\)]$/
     }
   ];
 };
