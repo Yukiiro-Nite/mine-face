@@ -50,17 +50,21 @@ module.exports = (server) => {
   });
 
   server.on('command:listhomes', (player) => {
-    let message = [{text: 'Homes: ', color: 'green'}];
-    Object.keys(homesConfig.homes[player]).forEach( home => {
-      message.push({
-        text: home,
-        underlined: true,
-        clickEvent: {action:"run_command", value:`-home ${home}`},
-        hoverEvent: {action:"show_text", value:{text:`click to tp to ${home}`}}
+    if(homesConfig.homes[player]) {
+      let message = [{text: 'Homes: ', color: 'green'}];
+      Object.keys(homesConfig.homes[player]).forEach(home => {
+        message.push({
+          text: home,
+          underlined: true,
+          clickEvent: {action: "run_command", value: `-home ${home}`},
+          hoverEvent: {action: "show_text", value: {text: `click to tp to ${home}`}}
+        });
+        message.push(" ");
       });
-      message.push(" ");
-    });
-    server.commands.tellraw(player, message);
+      server.commands.tellraw(player, message);
+    } else {
+      server.commands.tellraw(player, {text: `You don't have any homes! try using: -sethome home1`, color: 'red'});
+    }
   });
 
   fs.readFile('./mine-face-plugins/home-config.json', (err, data) => {
