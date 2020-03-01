@@ -77,7 +77,7 @@ module.exports = (server) => {
   });
 
   const save = () => {
-    fs.writeFile('./mine-face-plugins/home-config.json', JSON.stringify(homesConfig));
+    fs.writeFileSync('./mine-face-plugins/home-config.json', JSON.stringify(homesConfig));
   };
 
   const help = (commandName) => {
